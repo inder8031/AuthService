@@ -14,7 +14,9 @@ class UserRepository {
 
     async get(userId) {
         try {
-            const user = await User.findByPk(userId);
+            const user = await User.findByPk(userId, {
+                attributes: ['id', 'email']
+            });
             return user;
         } catch (error) {
             console.log("Something went wrong in user repository layer");
@@ -24,7 +26,11 @@ class UserRepository {
 
     async getAll() {
         try {
-            const users = await User.findAll();
+            const users = await User.findAll({
+                attributes: {
+                    exclude: ['password']
+                }
+            });
             return users;
         } catch (error) {
             console.log("Something went wrong in user repository layer");
