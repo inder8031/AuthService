@@ -37,7 +37,8 @@ class UserRepository {
             const user = await User.update(data, {
                 where: {
                     id: userId
-                }
+                },
+                individualHooks: true,
             });
             return user;
         } catch (error) {
