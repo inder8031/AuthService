@@ -5,6 +5,20 @@ class UserRepository {
     async create(data) {
         try {
             const user = await User.create(data);
+            const response = await user.toJSON();
+            delete response.password;
+            return response;
+        } catch (error) {
+            console.log("Something went wrong in user repository layer");
+            throw { error };
+        }
+    }
+
+    async getById(userId) {
+        try {
+            const user = await User.findByPk(userId, {
+                attributes: ['id', 'email']
+            });
             return user;
         } catch (error) {
             console.log("Something went wrong in user repository layer");
@@ -12,10 +26,12 @@ class UserRepository {
         }
     }
 
-    async get(userId) {
+    async getByEmail(email) {
         try {
-            const user = await User.findByPk(userId, {
-                attributes: ['id', 'email']
+            const user = await User.findOne({
+                where: {
+                    email: email 
+                }
             });
             return user;
         } catch (error) {
@@ -40,13 +56,13 @@ class UserRepository {
 
     async update(userId, data) {
         try {
-            const user = await User.update(data, {
+            await User.update(data, {
                 where: {
                     id: userId
                 },
                 individualHooks: true,
             });
-            return user;
+            return true;
         } catch (error) {
             console.log("Something went wrong in user repository layer");
             throw { error };
