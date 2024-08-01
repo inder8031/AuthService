@@ -1,4 +1,8 @@
 const UserRepository = require('../repository/user-repository');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const { JWT_KEY } = require('../config/serverConfig');
 
 class UserService {
     constructor () {
@@ -17,7 +21,7 @@ class UserService {
 
     async getUser(userId) {
         try {
-            const user = await this.userRepository.get(userId);
+            const user = await this.userRepository.getById(userId);
             return user;
         } catch (error) {
             console.log("Something went wrong in user service layer");
@@ -51,6 +55,55 @@ class UserService {
             return user;
         } catch (error) {
             console.log("Something went wrong in user service layer");
+            throw { error };
+        }
+    }
+
+    createToken(user) {
+        try {
+            const token = jwt.sign(user, JWT_KEY, {
+                expiresIn: 300
+            });
+            return token;
+        } catch (error) {
+            console.log("Token not created");
+            throw { error };
+        }
+    }
+
+    verifyToken(token) {
+        try {
+            const decoded = jwt.verify(token, JWT_KEY);
+            return decoded;
+        } catch (error) {
+            console.log("Invalid token");
+            throw { error };
+        }
+    }
+
+    checkPassword(plainPassword, encryptedPassword) {
+        try {
+            return bcrypt.compareSync(plainPassword, encryptedPassword);
+        } catch (error) {
+            console.log("Invalid Password");
+            throw { error };
+        }
+    }
+
+    async signIn(email, plainPassword) {
+        try {
+            const user = await this.userRepository.getByEmail(email);
+            if(!this.checkPassword(plainPassword, user.password)) {
+                console.log("Invalid Password");
+                throw { error: "Invalid Password"};
+            }
+            const token = this.createToken({
+                email: user.email,
+                id: user.id
+            });
+            return token;
+        } catch (error) {
+            console.log("Something went wrong in the signin process");
             throw { error };
         }
     }

@@ -104,6 +104,26 @@ const deleteUser = async (req, res) => {
             err: error
         });
     }
+}
+
+const signIn = async (req, res) => {
+    try {
+        const response = await userService.signIn(req.body.email, req.body.password);
+        return res.status(200).json({
+            token: response,
+            success: true,
+            message: "User successfully signed in",
+            err: {}
+        });
+    } catch (error) {
+        console.log("Failed to signIn a user");
+        return res.status(500).json({
+            data: {},
+            success: false,
+            message: "Failed to sign in",
+            err: error
+        });
+    }
 } 
 
 module.exports = {
@@ -111,5 +131,6 @@ module.exports = {
     getUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    signIn
 }

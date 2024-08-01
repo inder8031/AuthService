@@ -8,5 +8,6 @@ const SALT = bcrypt.genSaltSync(10);
 
 module.exports = {
     PORT,
-    SALT
+    SALT,
+    JWT_KEY: process.env.JWT_KEY,
 }
