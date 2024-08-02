@@ -2,6 +2,7 @@ const express = require('express');
 const { PORT } = require('./config/serverConfig');
 const db = require('./models/index');
 const { DB_SYNC } = require('./config/serverConfig');
+const { User, Role } = require('./models/index');
 
 const apiRoutes = require('./routes/index');
 const bodyParser = require('body-parser');
@@ -23,6 +24,15 @@ const startServer = async () => {
             throw { error };
         }
     }
+
+    const user = await User.findByPk(1);
+    const role = await Role.findByPk(2);
+    // const response = await user.addRole(role);
+    const response1 = await role.createUser({
+        email: 'kjghui@gmail.com',
+        password: '124589'
+    });
+    console.log(response1);
 
     app.listen(PORT, () => {
         console.log(`Server started at port: ${PORT}`);
