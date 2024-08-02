@@ -10,4 +10,5 @@ module.exports = {
     PORT,
     SALT,
     JWT_KEY: process.env.JWT_KEY,
+    DB_SYNC: process.env.DB_SYNC
 }
