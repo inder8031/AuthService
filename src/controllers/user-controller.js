@@ -147,6 +147,26 @@ const isAuthenticated = async (req, res) => {
     }
 }
 
+const isAdmin = async (req, res) => {
+    try {
+        const isAdmin = await userService.isAdmin(req.params.id);
+        return res.status(201).json({
+            data: isAdmin,
+            success: true,
+            message: "User is admin",
+            err: {}
+        });
+    } catch (error) {
+        console.log("Failed to check whether user is admin or not");
+        return res.status(500).json({
+            data: {},
+            success: false,
+            message: "failed to check whether user is admin or not",
+            err: error
+        });
+    }
+} 
+
 module.exports = {
     createUser,
     getUser,
@@ -154,5 +174,6 @@ module.exports = {
     updateUser,
     deleteUser,
     signIn,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
 }

@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post('/signup', validateUserAuthMiddleware.validateUserAuth, UserController.createUser);
 router.post('/signIn', validateUserAuthMiddleware.validateUserAuth, UserController.signIn);
+router.get('/isAdmin/:id', validateUserAuthMiddleware.validateIsAdmin, UserController.isAdmin);
 router.get('/isAuthenticated', UserController.isAuthenticated);
 router.get('/users/:id', UserController.getUser);
 router.get('/users', UserController.getAllUsers);

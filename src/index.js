@@ -25,15 +25,6 @@ const startServer = async () => {
         }
     }
 
-    const user = await User.findByPk(1);
-    const role = await Role.findByPk(2);
-    // const response = await user.addRole(role);
-    const response1 = await role.createUser({
-        email: 'kjghui@gmail.com',
-        password: '124589'
-    });
-    console.log(response1);
-
     app.listen(PORT, () => {
         console.log(`Server started at port: ${PORT}`);
     });
